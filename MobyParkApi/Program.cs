@@ -14,6 +14,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 builder.Services.AddControllers();
 
+// CORS - staat de React frontend (Vite dev server) toe om de API te benaderen
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Database
 if (builder.Environment.IsEnvironment("Testing"))
 {
@@ -152,6 +163,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// ✅ CORS moet vóór authenticatie
+app.UseCors("AllowFrontendDev");
 
 // ✅ Zorg dat JWT werkt!
 app.UseAuthentication();

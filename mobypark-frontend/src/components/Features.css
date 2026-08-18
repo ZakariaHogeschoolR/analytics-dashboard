@@ -1,0 +1,90 @@
+.features {
+  padding: 100px 0;
+  background: var(--bg-1);
+}
+
+.features__header {
+  max-width: 560px;
+  margin-bottom: 56px;
+}
+
+.features__eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--db-2);
+  margin-bottom: 14px;
+}
+
+.features__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  color: var(--db-1);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.feature-card {
+  position: relative;
+  background: linear-gradient(170deg, #fdfaf3, var(--bg-1));
+  border: 1px solid var(--bg-2);
+  border-radius: var(--radius-m);
+  padding: 30px 26px 28px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 44px -24px rgba(15, 42, 74, 0.4);
+}
+
+.feature-card__code {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--lb-1);
+  background: var(--db-1);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--db-1);
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* perforated notch top-right, echoing het ticket in de hero */
+.feature-card__perf {
+  position: absolute;
+  top: -1px;
+  right: 22px;
+  width: 16px;
+  height: 16px;
+  background: var(--bg-1);
+  border: 1px solid var(--bg-2);
+  border-top: none;
+  border-radius: 0 0 50% 50%;
+}
+
+@media (max-width: 900px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+}
