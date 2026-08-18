@@ -1,0 +1,151 @@
+### ============================================
+### PARKING LOTS - Alle endpoints
+### ============================================
+### Deze file bevat alle endpoints voor parkeerplaatsen.
+### Zorg dat je eerst ingelogd bent (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN - Vul dit in na login (kopieer uit auth.rest response)
+@token = YOUR_TOKEN_HIER
+@adminToken = YOUR_ADMIN_TOKEN_HIER
+
+### ============================================
+### GET ENDPOINTS
+### ============================================
+
+### 1. GET ALL - Haal alle parkeerplaatsen op (AllowAnonymous)
+GET {{baseUrl}}/api/parking-lots
+Content-Type: {{contentType}}
+
+### 2. GET ALL - Met sorting (name, location, capacity, available)
+GET {{baseUrl}}/api/parking-lots?sortBy=name&order=asc
+Content-Type: {{contentType}}
+
+### 3. GET ALL - Sorteer op capaciteit (descending)
+GET {{baseUrl}}/api/parking-lots?sortBy=capacity&order=desc
+Content-Type: {{contentType}}
+
+### 4. GET BY ID - Haal specifieke parkeerplaats op (AllowAnonymous)
+GET {{baseUrl}}/api/parking-lots/1
+Content-Type: {{contentType}}
+
+### 5. GET SESSIONS - Haal alle sessions van een parkeerplaats op (Authorize)
+GET {{baseUrl}}/api/parking-lots/1/sessions
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 6. GET SESSIONS - Alleen actieve sessions (Authorize)
+GET {{baseUrl}}/api/parking-lots/1/sessions?activeOnly=true
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### POST ENDPOINTS - SESSIONS
+### ============================================
+
+### 7. START SESSION - Start een parkeersessie (Authorize: User/Admin)
+POST {{baseUrl}}/api/parking-lots/1/sessions/start
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MDciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzY0MDAwNzkyLCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.4w4-k52OZFXs0aZ_BUMEgfis8IorGWcaiaF4dtGlUjQ
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD"
+}
+
+### 8. STOP SESSION - Stop een parkeersessie (Authorize: User/Admin)
+POST {{baseUrl}}/api/parking-lots/1/sessions/stop
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD"
+}
+
+### ============================================
+### POST ENDPOINTS - CREATE (Admin Only)
+### ============================================
+
+### 9. CREATE PARKING LOT - Maak nieuwe parkeerplaats aan (Authorize: Admin)
+POST {{baseUrl}}/api/parking-lots
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Centrum Parking",
+  "location": "Amsterdam Centrum",
+  "address": "Damrak 1, 1012 LG Amsterdam",
+  "capacity": 200,
+  "reserved": 20,
+  "tariff": 3.50,
+  "dayTariff": 25.00,
+  "lat": 52.3676,
+  "lng": 4.9041
+}
+
+### ============================================
+### PUT ENDPOINTS - UPDATE (Admin Only)
+### ============================================
+
+### 10. UPDATE PARKING LOT - Update parkeerplaats (Authorize: Admin)
+PUT {{baseUrl}}/api/parking-lots/1
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Centrum Parking Updated",
+  "location": "Amsterdam Centrum",
+  "address": "Damrak 1, 1012 LG Amsterdam",
+  "capacity": 250,
+  "reserved": 25,
+  "tariff": 4.00,
+  "dayTariff": 30.00,
+  "lat": 52.3676,
+  "lng": 4.9041
+}
+
+### ============================================
+### DELETE ENDPOINTS (Admin Only)
+### ============================================
+
+### 11. DELETE PARKING LOT - Verwijder parkeerplaats (Authorize: Admin)
+### Let op: Kan alleen verwijderd worden als er geen actieve sessions zijn
+DELETE {{baseUrl}}/api/parking-lots/1
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Complete parking session flow
+### 1. Start session
+POST {{baseUrl}}/api/parking-lots/1/sessions/start
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "XY-99-ZZ"
+}
+
+### 2. Check active sessions
+GET {{baseUrl}}/api/parking-lots/1/sessions?activeOnly=true
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 3. Stop session
+POST {{baseUrl}}/api/parking-lots/1/sessions/stop
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "XY-99-ZZ"
+}
+
+### 4. Check all sessions (including stopped)
+GET {{baseUrl}}/api/parking-lots/1/sessions
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}

@@ -1,0 +1,149 @@
+### INVOICE FEATURE - Demo
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKENS - Vul deze in na login (zie hieronder)
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGVtb2dlYmVydWlrZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzY1ODA3MjY4LCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.e-8lMG3Jd3GphOGLRUVGjSWRhKIT_aKh0l9aOUP9v2U
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MTQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5zdGVlbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzY1ODA3MjgzLCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ._2-Etr1SzMUGo-BzQ8uOZ9Z6DrZDqucw3VD3zgc480M
+### ============================================
+### STAP 0: LOGIN (VERPLICHT VOOR INVOICE FEATURE)
+### ============================================
+### Je moet ingelogd zijn om invoices te kunnen bekijken en betalen
+### ============================================
+
+### OPTIE 1: Register nieuwe gebruiker (als je nog geen account hebt)
+POST {{baseUrl}}/api/Users/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Demo Gebruiker",
+  "username": "demogeberuiker",
+  "password": "Demo123!",
+  "email": "demo2.0@example.com",
+  "phoneNumber": "+31612347777",
+  "birthYear": 2000
+}
+
+### OPTIE 2: Login met bestaande gebruiker
+POST {{baseUrl}}/api/Users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "demogeberuiker",
+  "password": "Demo123!"
+}
+
+### OPTIE 3: Login als Admin (voor invoice generatie)
+POST {{baseUrl}}/api/Users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "adminsteen",
+  "password": "Steen123"
+}
+
+### ============================================
+### STAP 1: MAAK PAYMENTS AAN
+### ============================================
+### Voordat je invoices kunt genereren, moeten er eerst payments zijn
+
+### Maak eerste payment aan (2 uur parkeren)
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "DEMO-004",
+  "duration": 120
+}
+
+### Maak tweede payment aan (3 uur parkeren)
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "DEMO-005",
+  "duration": 180
+}
+
+### Maak derde payment aan (1 uur parkeren)
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "DEMO-006",
+  "duration": 60
+}
+
+### BELANGRIJK:
+### - Deze payments hebben invoice_id = null
+### - Status is "Pending"
+### - Deze worden gebruikt om invoices te genereren
+### ============================================
+
+### ============================================
+### STAP 2: BEKIJK ALLE PAYMENTS (optioneel)
+### ============================================
+### Bekijk alle payments om te zien welke er zijn
+### Haal alle payments op van de ingelogde gebruiker
+GET {{baseUrl}}/api/Payments/user
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+ 
+### ============================================
+### STAP 3: GENEREER MAANDELIJKSE FACTUREN
+### ============================================
+### Genereert invoices voor alle gebruikers met onbetaalde payments
+### (payments waar invoice_id = null)
+### Groepeert per user_id en maakt één invoice per gebruiker per maand
+
+POST {{baseUrl}}/api/invoice/generate-invoices?year=2025&month=12
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+
+### ============================================
+### STAP 4: BEKIJK JE FACTUREN
+### ============================================
+### Haalt alle facturen op voor de ingelogde gebruiker
+### ============================================
+
+### Haal alle facturen op
+GET {{baseUrl}}/api/invoice/invoices
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+
+### ============================================
+### STAP 5: BEKIJK FACTUUR DETAILS
+### ============================================
+### Haalt volledige details op van één factuur
+### inclusief alle gekoppelde payments
+
+
+### Haal factuur details op (vervang {id} met je invoice ID)
+GET {{baseUrl}}/api/invoice/invoices/5
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### STAP 6: BETAAL EEN FACTUUR
+
+### Verwerkt de betaling van een factuur
+
+### Betaal factuur (vervang {id} met je invoice ID)
+POST {{baseUrl}}/api/invoice/invoices/5/pay
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "paymentMethod": "creditcard"
+}
+

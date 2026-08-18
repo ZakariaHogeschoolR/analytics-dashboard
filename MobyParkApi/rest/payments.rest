@@ -1,0 +1,176 @@
+### ============================================
+### PAYMENTS - Alle endpoints
+### ============================================
+### Deze file bevat alle endpoints voor betalingen.
+### Zorg dat je eerst ingelogd bent (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN - Vul dit in na login (kopieer uit auth.rest response)
+@token = YOUR_TOKEN_HIER
+@adminToken = YOUR_ADMIN_TOKEN_HIER
+
+### ============================================
+### GET ENDPOINTS
+### ============================================
+
+### 1. GET BY ID - Haal specifieke betaling op
+GET {{baseUrl}}/api/Payments/1
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MDciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzY0MDAyODA5LCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.dcjfRdlo3cFqcHrZUFC7Aw3hlDp9L45EBHPXnu2vh5E
+Content-Type: {{contentType}}
+
+### 2. GET STATUS - Haal betalingsstatus op
+GET {{baseUrl}}/api/Payments/1/status
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 3. GET USER PAYMENTS - Haal alle betalingen van gebruiker op
+GET {{baseUrl}}/api/Payments/user
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 4. GET USER PAYMENTS - Specifieke gebruiker (Admin kan andere gebruiker opvragen)
+GET {{baseUrl}}/api/Payments/user?userId=1
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 5. GET HISTORY - Haal betalingsgeschiedenis op
+GET {{baseUrl}}/api/Payments/history
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 6. GET TOTAL - Haal totaalbedrag van gebruiker op
+GET {{baseUrl}}/api/Payments/total
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 7. GET ADMIN TOTAL - Haal totaalbedrag op (Admin Only, optioneel userId)
+GET {{baseUrl}}/api/Payments/admin/total
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 8. GET ADMIN TOTAL - Voor specifieke gebruiker
+GET {{baseUrl}}/api/Payments/admin/total?userId=1
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### ============================================
+### POST ENDPOINTS - CREATE
+### ============================================
+
+### 9. CREATE PAYMENT - Maak nieuwe betaling aan
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer 
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "AB-12-CD",
+  "duration": 120
+}
+
+### 10. CREATE PAYMENT - Betaling voor 2 uur parkeren
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "XY-99-ZZ",
+  "duration": 120
+}
+
+### 11. CREATE PAYMENT - Betaling voor 30 minuten
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "AB-12-CD",
+  "duration": 30
+}
+
+### ============================================
+### PATCH ENDPOINTS - UPDATE
+### ============================================
+
+### 12. UPDATE STATUS - Update betalingsstatus (Admin kan alle betalingen updaten)
+PATCH {{baseUrl}}/api/Payments/1/status
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "newStatus": "Paid"
+}
+
+### 13. UPDATE STATUS - Markeer als gefaald
+PATCH {{baseUrl}}/api/Payments/1/status
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "newStatus": "Failed"
+}
+
+### ============================================
+### POST ENDPOINTS - REFUND (Admin Only)
+### ============================================
+
+### 14. REFUND PAYMENT - Terugbetaling verwerken (Admin Only)
+POST {{baseUrl}}/api/Payments/1/refund
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Complete payment flow
+### 1. Create payment
+POST {{baseUrl}}/api/Payments
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "parkingLotId": 1,
+  "licensePlate": "AB-12-CD",
+  "duration": 120
+}
+
+### 2. Get payment
+GET {{baseUrl}}/api/Payments/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 3. Get payment status
+GET {{baseUrl}}/api/Payments/1/status
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 4. Update payment status (als admin)
+PATCH {{baseUrl}}/api/Payments/1/status
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+{
+  "newStatus": "Paid"
+}
+
+### 5. Get user payments
+GET {{baseUrl}}/api/Payments/user
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 6. Get payment history
+GET {{baseUrl}}/api/Payments/history
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 7. Get total
+GET {{baseUrl}}/api/Payments/total
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}

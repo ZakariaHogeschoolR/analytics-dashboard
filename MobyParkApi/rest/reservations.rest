@@ -1,0 +1,155 @@
+### ============================================
+### RESERVATIONS - Alle endpoints
+### ============================================
+### Deze file bevat alle endpoints voor reserveringen.
+### Zorg dat je eerst ingelogd bent (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN - Vul dit in na login (kopieer uit auth.rest response)
+@token = YOUR_TOKEN_HIER
+@adminToken = YOUR_ADMIN_TOKEN_HIER
+
+### ============================================
+### GET ENDPOINTS
+### ============================================
+
+### 1. GET ALL - Haal alle reserveringen van ingelogde gebruiker op
+GET {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 2. GET ALL ADMIN - Haal alle reserveringen op (Admin Only)
+GET {{baseUrl}}/api/Reservation/all
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 3. GET BY ID - Haal specifieke reservering op
+GET {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### POST ENDPOINTS - CREATE
+### ============================================
+
+### 4. CREATE RESERVATION - Maak nieuwe reservering aan
+### Let op: Voertuig met dit kenteken moet bestaan en toebehoren aan de gebruiker
+POST {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2024-12-25 10:00:00",
+  "endDate": "2024-12-25 12:00:00",
+  "parkingLotId": 1
+}
+
+### 5. CREATE RESERVATION - Reservering voor morgen
+POST {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "XY-99-ZZ",
+  "startDate": "2024-12-26 09:00:00",
+  "endDate": "2024-12-26 17:00:00",
+  "parkingLotId": 1
+}
+
+### 6. CREATE RESERVATION - Reservering voor volgende week
+POST {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2025-01-01 08:00:00",
+  "endDate": "2025-01-01 18:00:00",
+  "parkingLotId": 1
+}
+
+### ============================================
+### PUT ENDPOINTS - UPDATE
+### ============================================
+
+### 7. UPDATE RESERVATION - Update reservering (alleen eigen reserveringen)
+PUT {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2024-12-25 11:00:00",
+  "endDate": "2024-12-25 14:00:00",
+  "parkingLotId": 1
+}
+
+### 8. UPDATE RESERVATION - Verplaats naar andere parkeerplaats
+PUT {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2024-12-25 10:00:00",
+  "endDate": "2024-12-25 12:00:00",
+  "parkingLotId": 2
+}
+
+### ============================================
+### DELETE ENDPOINTS
+### ============================================
+
+### 9. DELETE RESERVATION - Verwijder reservering
+DELETE {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Complete reservation flow
+### 1. Create reservation
+POST {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2024-12-25 10:00:00",
+  "endDate": "2024-12-25 12:00:00",
+  "parkingLotId": 1
+}
+
+### 2. Get all my reservations
+GET {{baseUrl}}/api/Reservation
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 3. Get specific reservation
+GET {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 4. Update reservation
+PUT {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "startDate": "2024-12-25 11:00:00",
+  "endDate": "2024-12-25 13:00:00",
+  "parkingLotId": 1
+}
+
+### 5. Delete reservation
+DELETE {{baseUrl}}/api/Reservation/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}

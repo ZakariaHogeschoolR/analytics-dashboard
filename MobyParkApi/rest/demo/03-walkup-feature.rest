@@ -1,0 +1,57 @@
+### ============================================
+### WALK-UP FEATURE - Demo
+### Walk-up parking maakt het mogelijk om te parkeren
+### zonder account of in te loggen.
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### GEEN TOKEN NODIG! Walk-up werkt zonder login
+
+### BELANGRIJK:
+### - Walk-up parking werkt ZONDER login/token
+### - Je kunt direct parkeren met alleen je kenteken
+
+### STAP 1: BEKIJK BESCHIKBARE PARKERPLAATSEN
+### Haalt alle parkeerplaatsen op 
+
+
+### Haal alle parkeerplaatsen op (GEEN TOKEN NODIG)
+GET {{baseUrl}}/api/parking-lots/3
+Content-Type: {{contentType}}
+
+### ============================================
+### STAP 2: START WALK-UP SESSIE
+### ============================================
+### Start een parkeersessie ZONDER in te loggen
+### 
+### LOGICA:
+### - Als er geen token is, wordt walk-up sessie gemaakt
+### - userId = null
+### - is_walk_up = true
+### - PaymentStatus = "PENDING"
+### ============================================
+
+### Start walk-up sessie (GEEN TOKEN NODIG)
+POST {{baseUrl}}/api/parking-lots/1/sessions/start
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "GUEST-123"
+}
+
+### ============================================
+### STAP 3: STOP WALK-UP SESSIE
+### ============================================
+### Stop een parkeersessie ZONDER in te loggen
+
+
+### Stop walk-up sessie (GEEN TOKEN NODIG)
+POST {{baseUrl}}/api/parking-lots/1/sessions/stop
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "GUEST-123"
+}
+

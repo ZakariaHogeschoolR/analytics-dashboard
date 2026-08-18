@@ -1,0 +1,139 @@
+### ============================================
+### PROFILE - Alle endpoints
+### ============================================
+### Deze file bevat alle endpoints voor gebruikersprofiel.
+### Zorg dat je eerst ingelogd bent (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN - Vul dit in na login (kopieer uit auth.rest response)
+@token = YOUR_TOKEN_HIER 
+
+### ============================================
+### GET ENDPOINTS
+### ============================================
+
+### 1. GET PROFILE - Haal profiel van ingelogde gebruiker op
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### PUT ENDPOINTS - UPDATE
+### ============================================
+
+### 2. UPDATE PROFILE - Update naam
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Updated Naam"
+}
+
+### 3. UPDATE PROFILE - Update email
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "email": "nieuwemail@example.com"
+}
+
+### 4. UPDATE PROFILE - Update telefoonnummer
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MDciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzYzOTk5NzE3LCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.ZFP3aX4Te4rsWp2tV15Q8hSTp_G7E_5gvz6PS1um1zQ
+Content-Type: {{contentType}}
+
+{
+  "phoneNumber": "+31698765432"
+}
+
+### 5. UPDATE PROFILE - Update geboortejaar
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "birthYear": 1991
+}
+
+### 6. UPDATE PROFILE - Update wachtwoord
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "password": "NieuwWachtwoord123!"
+}
+
+### 7. UPDATE PROFILE - Update meerdere velden tegelijk
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Volledig Geüpdatet",
+  "email": "volledig@example.com",
+  "phoneNumber": "+31611111111",
+  "birthYear": 1992
+}
+
+### ============================================
+### DELETE ENDPOINTS
+### ============================================
+
+### 8. DELETE PROFILE - Verwijder profiel (zet op inactive)
+DELETE {{baseUrl}}/api/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MDciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzYzOTk5NzE3LCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.ZFP3aX4Te4rsWp2tV15Q8hSTp_G7E_5gvz6PS1um1zQ
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Complete profile management flow
+### 1. Get current profile
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 2. Update profile
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test Gebruiker Updated",
+  "email": "updated@example.com",
+  "phoneNumber": "+31612345678",
+  "birthYear": 1990
+}
+
+### 3. Verify update
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 4. Update password
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "password": "NieuwWachtwoord123!"
+}
+
+### 5. Delete profile (zet op inactive)
+DELETE {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 6. Verify deletion (should show active: false)
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+

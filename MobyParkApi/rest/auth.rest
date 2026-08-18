@@ -1,0 +1,118 @@
+### ============================================
+### AUTHENTICATION - Register & Login
+### ============================================
+### Deze file bevat de basis authenticatie endpoints.
+### Run eerst register, dan login om een token te krijgen.
+### Het token wordt automatisch opgeslagen voor gebruik in andere .rest files.
+### ============================================
+
+### VARIABELEN - Pas deze aan indien nodig
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN VARIABELEN
+### Vul deze handmatig in na login (kopieer accessToken uit response)
+@token = YOUR_TOKEN_HIER
+@adminToken = YOUR_ADMIN_TOKEN_HIER
+
+### ============================================
+### 1. REGISTER - Nieuwe gebruiker aanmaken
+### ============================================
+# @name register
+POST {{baseUrl}}/api/Users/register
+Content-Type: {{contentType}}
+
+{
+  "name": "welkomtester",
+  "username": "usertest",
+  "password": "Welkom123!",
+  "email": "ietsvantest@example.com",
+  "phoneNumber": "+31612345678",
+  "birthYear": 1990
+}
+
+### ============================================
+### 2. LOGIN - Inloggen en token ophalen
+### ============================================
+# @name login
+POST {{baseUrl}}/api/Users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "usertest",
+  "password": "Welkom123!"
+}
+
+### 
+### BELANGRIJK: Kopieer het accessToken uit de response hieronder
+### en plak het in de @token variabele bovenaan dit bestand
+### of in de andere .rest bestanden
+###
+### Response bevat:
+### {
+###   "message": "Inloggen succesvol!",
+###   "accessToken": "KOPIEER_DIT_TOKEN",
+###   "role": "User"
+### }
+###
+### ============================================
+### 3. LOGIN RESPONSE - Token opslaan
+### ============================================
+# Na login wordt het token automatisch opgeslagen in de 'token' variable
+# Het token wordt gebruikt in andere .rest files via {{token}}
+# Response format:
+# {
+#   "message": "Inloggen succesvol!",
+#   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+#   "role": "User"
+# }
+
+### ============================================
+### 4. LOGOUT - Uitloggen (client-side token verwijderen)
+### ============================================
+# @name logout
+POST {{baseUrl}}/api/Users/logout
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### ALTERNATIEVE TEST GEBRUIKERS
+### ============================================
+
+### Register Admin User (voor admin endpoints)
+# @name registerAdmin
+POST {{baseUrl}}/api/Users/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Admin Gebruiker",
+  "username": "adminuser",
+  "password": "AdminPass123!",
+  "email": "admin@example.com",
+  "phoneNumber": "+31698765432",
+  "birthYear": 1985
+}
+
+### Login Admin User
+# @name loginAdmin
+POST {{baseUrl}}/api/Users/login
+Content-Type: {{contentType}}
+
+{
+  "username": "adminuser",
+  "password": "AdminPass123!"
+}
+
+### 
+### BELANGRIJK: Kopieer het accessToken uit de response hieronder
+### en plak het in de @adminToken variabele in users-admin.rest
+###
+### ============================================
+### TOKEN GEBRUIK
+### ============================================
+### Na login, gebruik het token in andere requests:
+### Authorization: Bearer {{token}}
+###
+### Het token wordt automatisch opgeslagen in de REST Client
+### en kan worden gebruikt in andere .rest files.
+

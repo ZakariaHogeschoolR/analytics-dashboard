@@ -1,0 +1,151 @@
+### ============================================
+### VEHICLES - Alle endpoints
+### ============================================
+### Deze file bevat alle endpoints voor voertuigen.
+### Zorg dat je eerst ingelogd bent (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### TOKEN - Vul dit in na login (kopieer uit auth.rest response)
+@token = YOUR_TOKEN_HIER
+@adminToken = YOUR_ADMIN_TOKEN_HIER
+
+### ============================================
+### GET ENDPOINTS
+### ============================================
+
+### 1. GET MY VEHICLES - Haal alle voertuigen van ingelogde gebruiker op
+GET {{baseUrl}}/api/Vehicles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2MDciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzY0MDAzOTMzLCJpc3MiOiJNb2J5UGFya0FwaSIsImF1ZCI6Ik1vYnlQYXJrQXBpVXNlcnMifQ.XaLCD3uNspkGOFfkpYj88l6pIBEjKcmUVwZ6T9bD93U
+Content-Type: {{contentType}}
+
+### 2. GET ALL VEHICLES - Haal alle voertuigen op (Admin Only)
+GET {{baseUrl}}/api/Vehicles/all
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 3. GET BY ID - Haal specifiek voertuig op
+GET {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### POST ENDPOINTS - CREATE
+### ============================================
+
+### 4. CREATE VEHICLE - Maak nieuw voertuig aan
+POST {{baseUrl}}/api/Vehicles
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "AB-12-CD",
+  "make": "Volkswagen",
+  "model": "Golf",
+  "color": "Blauw",
+  "year": 2020
+}
+
+### 5. CREATE VEHICLE - Alternatief kenteken format
+POST {{baseUrl}}/api/Vehicles
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "XY-99-ZZ",
+  "make": "BMW",
+  "model": "3 Series",
+  "color": "Zwart",
+  "year": 2021
+}
+
+### ============================================
+### PATCH ENDPOINTS - UPDATE
+### ============================================
+
+### 6. UPDATE VEHICLE - Update voertuig (alleen eigen voertuigen)
+PATCH {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "color": "Rood",
+  "year": 2023
+}
+
+### 7. UPDATE VEHICLE - Update kenteken
+PATCH {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "EF-34-GH"
+}
+
+### 8. UPDATE VEHICLE - Update meerdere velden
+PATCH {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "make": "Mercedes",
+  "model": "C-Class",
+  "color": "Wit",
+  "year": 2022
+}
+
+### ============================================
+### DELETE ENDPOINTS
+### ============================================
+
+### 9. DELETE VEHICLE - Verwijder voertuig
+### Let op: Kan niet verwijderd worden als er actieve reserveringen zijn
+DELETE {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Complete vehicle management flow
+### 1. Create vehicle
+POST {{baseUrl}}/api/Vehicles
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "licensePlate": "IJ-56-KL",
+  "make": "Audi",
+  "model": "A4",
+  "color": "Grijs",
+  "year": 2021
+}
+
+### 2. Get all my vehicles
+GET {{baseUrl}}/api/Vehicles
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 3. Update vehicle
+PATCH {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "color": "Zwart",
+  "year": 2023
+}
+
+### 4. Get specific vehicle
+GET {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+### 5. Delete vehicle (als laatste stap)
+DELETE {{baseUrl}}/api/Vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}

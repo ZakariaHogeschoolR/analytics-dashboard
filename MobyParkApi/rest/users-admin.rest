@@ -1,0 +1,52 @@
+### ============================================
+### USERS - Admin Endpoints
+### ============================================
+### Deze file bevat admin-only endpoints voor gebruikersbeheer.
+### Zorg dat je eerst ingelogd bent als ADMIN (auth.rest) om een token te hebben.
+### ============================================
+
+### VARIABELEN
+@baseUrl = http://localhost:5082
+@contentType = application/json
+
+### ADMIN TOKEN - Vul dit in na admin login (kopieer uit auth.rest response)
+@adminToken = YOUR_ADMIN_TOKEN_HIER 
+
+### ============================================
+### GET ENDPOINTS (Admin Only)
+### ============================================
+
+### 1. GET ALL USERS - Haal alle gebruikers op (Admin Only)
+GET {{baseUrl}}/api/Users/all
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### ============================================
+### PATCH ENDPOINTS (Admin Only)
+### ============================================
+
+### 2. MAKE ADMIN - Maak gebruiker admin (Admin Only)
+PATCH {{baseUrl}}/api/Users/1/make-admin
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### ============================================
+### TEST SCENARIOS
+### ============================================
+
+### Scenario: Admin user management
+### 1. Get all users
+GET {{baseUrl}}/api/Users/all
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 2. Make user admin
+PATCH {{baseUrl}}/api/Users/2/make-admin
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
+### 3. Verify (get all users again)
+GET {{baseUrl}}/api/Users/all
+Authorization: Bearer {{adminToken}}
+Content-Type: {{contentType}}
+
